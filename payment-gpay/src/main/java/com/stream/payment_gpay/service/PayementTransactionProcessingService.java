@@ -46,7 +46,7 @@ public class PayementTransactionProcessingService {
     public void paymentProcessing(PayRequest payRequest) {
 
 
-        //store some success failre value in payment-fraud-checked-authorizations-checked-topic and according go ahead
+        //store some success failure value in payment-fraud-checked-authorizations-checked-topic and according go ahead
 
 
         // Process Payment call
@@ -62,7 +62,7 @@ public class PayementTransactionProcessingService {
             payRequest.setPaymentStatus(TransactionStatus.INITIATED);
             payRequest.setTransactionId(uniqueTransactionIdGenerator.generateUniqueTransactionId());
             payRequest = payRequestRepository.save(payRequest);// Transaction OutOfBox Pattern
-            //Capture reponse and store it on topic payment-processed-topic
+            //Capture response and store it on topic payment-processed-topic
             //call Payment Gateway and capture response
             //payRequest.setPaymentStatus(TransactionStatus.COMPLETED);
             //payRequest.setPaymentStatus(TransactionStatus.FAILED);

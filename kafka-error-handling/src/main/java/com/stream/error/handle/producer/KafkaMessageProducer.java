@@ -32,6 +32,7 @@ public class KafkaMessageProducer {
 
     public void sendUserEvent(User user) {
         try {
+            //also we send like  kafkaTemplate.send(new ProducerRecord<>(topic, message));
             CompletableFuture<SendResult<String, User>> future = kafkaTemplate.send(topicName, user);
             future.whenComplete((result, ex) -> {
                 if (ex == null) {

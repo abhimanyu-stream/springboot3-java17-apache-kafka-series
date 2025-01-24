@@ -11,6 +11,7 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
+import org.springframework.kafka.transaction.KafkaTransactionManager;
 
 
 import java.util.HashMap;
@@ -33,6 +34,9 @@ public class KafkaProducerConfig {
 
         // TO have a safe producer where the writes are acknowledged, we should use below settings
         prop.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
+        prop.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG,"tx-");
+        //When creating a Kafka producer, enable idempotency and transactions to ensure message reliability. The transactional.id enables transactions, while setting enable.idempotence to true helps Kafka deduplicate messages when a producer retry happens.
+
         prop.put(ProducerConfig.ACKS_CONFIG	, "all");
         prop.put(ProducerConfig.RETRIES_CONFIG, Integer.toString(Integer.MAX_VALUE));
         prop.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, "5");
@@ -41,7 +45,8 @@ public class KafkaProducerConfig {
         prop.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "snappy");
         prop.put(ProducerConfig.LINGER_MS_CONFIG, "20");
         prop.put(ProducerConfig.BATCH_SIZE_CONFIG, Integer.toString(32*1024)); //32KB
-        prop.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG,"tx-");
+
+
 
 
         return prop;
@@ -56,6 +61,11 @@ public class KafkaProducerConfig {
         KafkaTemplate<String, User> kafkaTemplate = new KafkaTemplate<>(producerFactoryUser());
         kafkaTemplate.setTransactionIdPrefix("tx-");
         return kafkaTemplate;
+    }
+
+    @Bean
+    public KafkaTransactionManager<String, User> kafkaTransactionManager() {
+        return new KafkaTransactionManager<>(producerFactoryUser());
     }
 
 

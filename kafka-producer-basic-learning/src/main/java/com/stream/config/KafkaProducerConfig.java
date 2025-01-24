@@ -5,6 +5,7 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
@@ -23,6 +24,15 @@ public class KafkaProducerConfig {
     @Bean("streamtopic2")
     public NewTopic createTopicStreamTopic2(){
         return new NewTopic("streamtopic2", 3, (short) 1);
+    }
+
+    // Kafka Topic Configuration with Replication Factor
+    @Bean
+    public NewTopic myTopic() {
+        return TopicBuilder.name("my-topic")
+                .partitions(3)              // Number of partitions
+                .replicas(2)                // Number of replicas per partition
+                .build();
     }
     //NewTopic(String name, int numPartitions, short replicationFactor)
     @Bean
